@@ -4,7 +4,7 @@
 \alias{wkmeans}
 \title{Test}
 \usage{
-wkmeans(x, k, w = rep(1, nrow(x)), iter_max = 10, nstart = 1)
+wkmeans(x, k, w = rep(1, nrow(x)), iter_max = 10, nstart = 1, cores = 1)
 }
 \arguments{
 \item{x}{numeric matrix of data, or an object that can be coerced to such a matrix (such as a numeric vector or a data frame with all numeric columns).}
@@ -16,6 +16,8 @@ wkmeans(x, k, w = rep(1, nrow(x)), iter_max = 10, nstart = 1)
 \item{iter_max}{maximum number of iterations allowed.}
 
 \item{nstart}{number of random initialisation of clusters. Should be high for the clustering results to be stable.}
+
+\item{cores}{numbers of cores to use in to try several initialisations in parallel (only useful if nstart > 1).}
 }
 \description{
 Test

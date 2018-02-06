@@ -8,6 +8,7 @@ NULL
 #' @param w weights for each object (row) in x. By default, all observations are weighted the same, which yields regular kmeans.
 #' @param iter_max maximum number of iterations allowed.
 #' @param nstart number of random initialisation of clusters. Should be high for the clustering results to be stable.
+#' @param cores numbers of cores to use in to try several initialisations in parallel (only useful if nstart > 1).
 #' @examples
 #' # start with fake data
 #' x <- matrix(runif(1000*2), ncol=2)
@@ -21,7 +22,8 @@ NULL
 #' plot(x, col=factor(g$cluster))
 #' # more clusters are created on the left, as expected
 #' @export
-wkmeans <- function(x, k, w=rep(1, nrow(x)), iter_max=10, nstart=1) {
+#' @importFrom parallel mclapply
+wkmeans <- function(x, k, w=rep(1, nrow(x)), iter_max=10, nstart=1, cores=1) {
   # check arguments
   if (length(w) != nrow(x)) {
     stop("Need as many weights as there are rows in x")
@@ -38,7 +40,7 @@ wkmeans <- function(x, k, w=rep(1, nrow(x)), iter_max=10, nstart=1) {
   m <- ncol(x)
 
   # try several random starts
-  for (i in 1:nstart) {
+  res <- parallel::mclapply(1:nstart, function(i) {
     # pick k points as random starts
     centroids <- x[sample.int(n, k, replace=F),]
     # compute kmeans
@@ -54,14 +56,11 @@ wkmeans <- function(x, k, w=rep(1, nrow(x)), iter_max=10, nstart=1) {
       clusters=rep(1L, n), # dummy cluster variable
       ss=0.                # dummy sum of squares variable
     )
+  }, mc.cores=min(cores, nstart))
 
-    # keep the result only if it is better than the previous
-    if (res$ss < min_ss) {
-      # message(i, ", ss=", res$ss)
-      min_ss <- res$ss
-      out <- res
-    }
-  }
+  # keep only the best one
+  sss <- sapply(res, `[[`, "ss")
+  out <- res[[which.min(sss)]]
 
   # format output like that of kmeans()
   return(list(
