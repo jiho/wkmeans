@@ -1,7 +1,7 @@
 Package: wkmeans
 Type: Package
 Title: Observation Weighted K-Means
-Version: 0.1.0
+Version: 0.2.0
 Author: Jean-Olivier Irisson
 Maintainer: Jean-Olivier Irisson <irisson@normalesup.org>
 Description: Performs kmeans clustering with optional observation weights.
