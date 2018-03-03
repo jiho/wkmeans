@@ -54,7 +54,8 @@ wkmeans <- function(x, k, w=rep(1, nrow(x)), iter_max=10, nstart=1, cores=1) {
       n=n, m=m,            # dimensions
       centroids=centroids, # initial centroids
       clusters=rep(1L, n), # dummy cluster variable
-      ss=0.                # dummy sum of squares variable
+      ss=0.,               # dummy sum of squares variable
+      sqdist=rep(0., n)    # dummy squadred distance variable
     )
   }, mc.cores=min(cores, nstart))
 

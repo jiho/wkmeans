@@ -1,15 +1,15 @@
-subroutine wkmeans(X, k, W, iter_max, n, m, centroids, clusters, ss)
+subroutine wkmeans(X, k, W, iter_max, n, m, centroids, clusters, ss, sqdist)
   ! input (and output variables)
   integer, intent(in) :: n, m, k, iter_max
   double precision, intent(inout) :: X(n,m), W(n)
   double precision, intent(inout) :: centroids(k,m)
   integer, intent(inout) :: clusters(n)
-  double precision, intent(inout) :: ss
+  double precision, intent(inout) :: ss, sqdist(n)
 
   ! local work variables
   integer :: i_n, i_m, i_k, iter
   logical :: idx_k(n)
-  double precision :: this_sqdist(k), sqdist(n), new_centroids(k,m)
+  double precision :: this_sqdist(k), new_centroids(k,m)
 
 ! ALGORITHM
 ! start from k provided centroids
